@@ -1,4 +1,4 @@
-package com.example.administrator.dilixunbao.Register;
+package com.example.administrator.dilixunbao.register;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,7 +19,6 @@ import com.example.administrator.dilixunbao.User;
 import com.example.administrator.dilixunbao.commons.ActivityUtils;
 import com.example.administrator.dilixunbao.commons.RegexUtils;
 import com.example.administrator.dilixunbao.custom.AlertDialogFragment;
-import com.example.administrator.dilixunbao.login.LoginActivity;
 import com.example.administrator.dilixunbao.map.HomeActivity;
 
 import butterknife.BindView;

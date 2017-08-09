@@ -1,4 +1,4 @@
-package com.example.administrator.dilixunbao.Register;
+package com.example.administrator.dilixunbao.register;
 
 /**
  * Created by Administrator on 2017/8/3.

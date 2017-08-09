@@ -1,8 +1,7 @@
-package com.example.administrator.dilixunbao.Register;
+package com.example.administrator.dilixunbao.register;
 
 import com.example.administrator.dilixunbao.User;
 import com.example.administrator.dilixunbao.UserPrefs;
-import com.example.administrator.dilixunbao.login.LoginResult;
 import com.example.administrator.dilixunbao.net.NetClient;
 
 import retrofit2.Call;

@@ -1,6 +1,6 @@
 package com.example.administrator.dilixunbao.net;
 
-import com.example.administrator.dilixunbao.Register.RegisterResult;
+import com.example.administrator.dilixunbao.register.RegisterResult;
 import com.example.administrator.dilixunbao.User;
 import com.example.administrator.dilixunbao.login.LoginResult;
 import com.example.administrator.dilixunbao.treasure.Area;

@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.administrator.dilixunbao.Register.RegisterActivity;
+import com.example.administrator.dilixunbao.register.RegisterActivity;
 import com.example.administrator.dilixunbao.commons.ActivityUtils;
 import com.example.administrator.dilixunbao.login.LoginActivity;
 import com.example.administrator.dilixunbao.map.HomeActivity;

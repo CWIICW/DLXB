@@ -51,7 +51,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Register.RegisterActivity"/>
+        <activity android:name=".register.RegisterActivity"/>
         <activity android:name=".login.LoginActivity"/>
         <activity android:name=".map.HomeActivity">
         </activity>
