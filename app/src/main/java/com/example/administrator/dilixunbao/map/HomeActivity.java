@@ -19,6 +19,7 @@ import com.example.administrator.dilixunbao.MainActivity;
 import com.example.administrator.dilixunbao.R;
 import com.example.administrator.dilixunbao.UserPrefs;
 import com.example.administrator.dilixunbao.commons.ActivityUtils;
+import com.example.administrator.dilixunbao.treasure.TreasureRepo;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -76,6 +77,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (photo != null) {
             Picasso.with(this).load(photo).into(mUserIcon);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        TreasureRepo.getInstance().clear();
     }
 
     @Override
