@@ -7,6 +7,8 @@ import com.example.administrator.dilixunbao.treasure.Area;
 import com.example.administrator.dilixunbao.treasure.Treasure;
 import com.example.administrator.dilixunbao.treasure.detail.TreasureDetail;
 import com.example.administrator.dilixunbao.treasure.detail.TreasureDetailResult;
+import com.example.administrator.dilixunbao.treasure.hide.HideTreasure;
+import com.example.administrator.dilixunbao.treasure.hide.HideTreasureResult;
 
 import java.util.List;
 
@@ -36,4 +38,7 @@ public interface NetRequest {
     @POST("/Handler/TreasureHandler.ashx?action=tdetails")
     Call<List<TreasureDetailResult>> getTreasureDetail(@Body TreasureDetail treasureDetail);
 
+    //上传宝藏
+    @POST("/Handler/TreasureHandler.ashx?action=hide")
+    Call<HideTreasureResult> hideTreasure(@Body HideTreasure hideTreasure);
 }

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,12 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.example.administrator.dilixunbao.R;
 import com.example.administrator.dilixunbao.commons.ActivityUtils;
 import com.example.administrator.dilixunbao.custom.TreasureView;
@@ -45,6 +52,7 @@ import com.example.administrator.dilixunbao.treasure.Area;
 import com.example.administrator.dilixunbao.treasure.Treasure;
 import com.example.administrator.dilixunbao.treasure.TreasureRepo;
 import com.example.administrator.dilixunbao.treasure.detail.TreasureDetailActivity;
+import com.example.administrator.dilixunbao.treasure.hide.HideTreasureActivity;
 
 import java.util.List;
 
@@ -107,6 +115,9 @@ public class MapFragment extends Fragment implements MapFragmentView {
     private BitmapDescriptor mTreasure_expanded;
     private LatLng mTarget;
     private InfoWindow mInfoWindow;
+    private static String mCurrentAdress;
+    private GeoCoder mGeoCoder;
+    private String GeoCurrentAdress;
 
     @Nullable
     @Override
@@ -129,7 +140,37 @@ public class MapFragment extends Fragment implements MapFragmentView {
         initView();
         //初始化位置相关
         initLocation();
+        //地理编码相关
+        initGeoCoder();
     }
+
+    //地理编码相关
+    private void initGeoCoder() {
+        mGeoCoder = GeoCoder.newInstance();
+        //设置地理编码完成的监听
+        mGeoCoder.setOnGetGeoCodeResultListener(mOnGetGeoCoderResultListener);
+    }
+
+    //设置地理编码完成的监听
+    private OnGetGeoCoderResultListener mOnGetGeoCoderResultListener = new OnGetGeoCoderResultListener() {
+        //获取地理编码结果
+        @Override
+        public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+
+        }
+
+        //获取反地理编码结果
+        @Override
+        public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
+            if (reverseGeoCodeResult == null || reverseGeoCodeResult.error != SearchResult.ERRORNO.NO_ERROR) {
+                mCurrentAdress = "未知位置";
+                mTvCurrentLocation.setText(mCurrentAdress);
+                return;
+            }
+            mCurrentAdress = reverseGeoCodeResult.getAddress();
+            mTvCurrentLocation.setText(mCurrentAdress);
+        }
+    };
 
     private static final int TREASURE_MODE_NORMAL = 0;
     private static final int TREASURE_MODE_SELECTED = 1;
@@ -204,8 +245,9 @@ public class MapFragment extends Fragment implements MapFragmentView {
             double latitude = bdLocation.getLatitude();//纬度
             double longitude = bdLocation.getLongitude();//经度
             mCurrentLocation = new LatLng(latitude, longitude);
-            String addrStr = bdLocation.getAddrStr();//位置描述
-            Log.e("TAG", "当前位于:" + addrStr + "经纬度是" + longitude + ":" + latitude);
+            //位置描述
+            mCurrentAdress = bdLocation.getAddrStr();
+            Log.e("TAG", "当前位于:" + mCurrentAdress + "经纬度是" + longitude + ":" + latitude);
             MyLocationData myLocationData = new MyLocationData.Builder()
                     .accuracy(100f)//精度
                     .latitude(latitude)
@@ -297,6 +339,11 @@ public class MapFragment extends Fragment implements MapFragmentView {
             if (mTarget != mCurrentStatus) {
                 //此时认为地图状态真的改变了
                 updateView(mTarget);
+                if (TREASURE_MODE_CURRENT == TREASURE_MODE_HIDE) {
+                    ReverseGeoCodeOption reverseGeoCodeOption = new ReverseGeoCodeOption();
+                    reverseGeoCodeOption.location(mTarget);
+                    mGeoCoder.reverseGeoCode(reverseGeoCodeOption);
+                }
                 mCurrentStatus = mTarget;
             }
         }
@@ -362,12 +409,25 @@ public class MapFragment extends Fragment implements MapFragmentView {
         }
     }
 
+    //进入宝物详情页面
     @OnClick({R.id.treasureView})
     public void navigateToTreasureDetailActivity() {
         Bundle bundle = mCurrentMarker.getExtraInfo();
         int treasure_id = bundle.getInt("treasure_id");
         Treasure treasure = TreasureRepo.getInstance().getTreasure(treasure_id);
-        TreasureDetailActivity.open(getContext(),treasure);
+        TreasureDetailActivity.open(getContext(), treasure);
+    }
+
+    @OnClick({R.id.hide_treasure})
+    public void navigateToHideTreasureActivity() {
+        String treasureTitle = mEtTreasureTitle.getText().toString();
+        if (TextUtils.isEmpty(treasureTitle)) {
+            mActivityUtils.showToast("标题不能为空");
+            return;
+        }
+        HideTreasureActivity.open(getContext(), treasureTitle, mCurrentStatus, mCurrentAdress);
+        mEtTreasureTitle.setText("");
+
     }
 
     @Override
@@ -412,5 +472,9 @@ public class MapFragment extends Fragment implements MapFragmentView {
 
     public static LatLng getLocation() {
         return mCurrentLocation;
+    }
+
+    public static String getAdress() {
+        return mCurrentAdress;
     }
 }
