@@ -60,6 +60,8 @@
         </activity>
         <activity android:name=".treasure.hide.HideTreasureActivity">
         </activity>
+        <activity android:name=".account.AccountActivity">
+        </activity>
     </application>
 
 </manifest>

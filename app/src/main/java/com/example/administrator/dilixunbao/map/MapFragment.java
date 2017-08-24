@@ -457,6 +457,17 @@ public class MapFragment extends Fragment implements MapFragmentView {
 
     @Override
     public void setTreasureData(List<Treasure> treasureList) {
+        showOverlay(treasureList);
+
+    }
+
+    @Override
+    public void showTreasure(List<Treasure> treasureList) {
+        showOverlay(treasureList);
+    }
+
+    private void showOverlay(List<Treasure> treasureList) {
+        //先清除掉已有的marker
         mBaiduMap.clear();
         for (Treasure mTreasure : treasureList) {
             Bundle bundle = new Bundle();
@@ -477,4 +488,12 @@ public class MapFragment extends Fragment implements MapFragmentView {
     public static String getAdress() {
         return mCurrentAdress;
     }
+
+    public boolean isNomalMode() {
+        if (TREASURE_MODE_CURRENT != TREASURE_MODE_NORMAL) {
+            return false;
+        }
+        return true;
+    }
 }
+

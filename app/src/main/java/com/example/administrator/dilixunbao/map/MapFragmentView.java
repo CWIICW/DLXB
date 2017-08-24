@@ -13,4 +13,6 @@ public interface MapFragmentView {
     void showMessage(String message);
 
     void setTreasureData(List<Treasure> treasureList);
+
+    void showTreasure(List<Treasure> treasureList);
 }

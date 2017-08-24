@@ -25,18 +25,19 @@ public class MapFragmentPresenter {
         mMapFragmentView = mapFragmentView;
     }
 
-    public void getTreasureInArea(Area area){
-        if (TreasureRepo.getInstance().isCached(area)){
+    public void getTreasureInArea(Area area) {
+        if (TreasureRepo.getInstance().isCached(area)) {
+            mMapFragmentView.showTreasure(TreasureRepo.getInstance().getTreasure());
             return;
         }
         mArea = area;
         NetClient.getInstance().getNetRequest().getTreasure(area).enqueue(new Callback<List<Treasure>>() {
             @Override
             public void onResponse(Call<List<Treasure>> call, Response<List<Treasure>> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     List<Treasure> treasureList = response.body();
 
-                    if (treasureList==null){
+                    if (treasureList == null) {
                         mMapFragmentView.showMessage("未知错误");
                         return;
                     }
@@ -51,7 +52,7 @@ public class MapFragmentPresenter {
 
             @Override
             public void onFailure(Call<List<Treasure>> call, Throwable t) {
-                mMapFragmentView.showMessage("请求失败"+t.getMessage());
+                mMapFragmentView.showMessage("请求失败" + t.getMessage());
             }
         });
     }
